@@ -1,0 +1,19 @@
+{
+    "name": "hasan/wedevs-db-examples",
+    "description": "Assignment for a CRUD operation using $wpdb of WordPress",
+    "type": "wordpress-plugin",
+    "license": "GPLv2.0",
+    "autoload": {
+        "psr-4": {
+            "Hasan\\WedevsDbExamples\\": "inc/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Hasan Tareq",
+            "email": "hsntareq@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
