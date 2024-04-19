@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<ruleset name="WPDB CRUD">
+	<description>Coding standard of the WPDB CRUD WordPress plugin.</description>
+	<rule ref="WordPress">
+		<exclude name="WordPress.Files.FileName"/>
+	</rule>
+	<arg name="extensions" value="php"/>
+	<file>.</file>
+	<exclude-pattern>*/vendor/*</exclude-pattern>
+	<ini name="error_reporting" value="E_ALL &#38; ~E_DEPRECATED" />
+</ruleset>
