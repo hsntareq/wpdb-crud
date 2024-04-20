@@ -1,0 +1,14 @@
+{
+	"name": "wpdb-crud",
+	"version": "1.0.0",
+	"description": "",
+	"scripts": {
+		"zip": "node bundle.js"
+	},
+	"dependencies": {
+		"dir-archiver": "^2.1.0"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC"
+}

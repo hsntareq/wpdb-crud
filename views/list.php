@@ -1,8 +1,15 @@
-<div style="display:flex; align-items:center;gap:30px">
-	<h2>WPDB CRUD</h2> <a class="button button-small button-secondary"
-		href="<?php echo esc_url( admin_url( 'admin.php?page=wpdb-crud&action=add' ) ); ?>">Add New</a>
-</div>
-<p>This is a custom admin page for WPDB CRUD plugin.</p>
+<?php
+/**
+ * List view.
+ *
+ * @package wordpress-plugin
+ */
+
+?>
+<h1 class="wp-heading-inline"><?php esc_attr_e( 'WPDB CRUD', 'wpdb-crud' ); ?></h1>
+<a class="page-title-action "
+	href="<?php echo esc_url( admin_url( 'admin.php?page=wpdb-crud&action=add' ) ); ?>"><?php esc_attr_e( 'Add new data', 'wpdb-crud' ); ?></a>
+<p><?php esc_attr_e( 'This is a list of data from database for WPDB CRUD plugin.', 'wpdb-crud' ); ?></p>
 
 <table class="wp-list-table widefat striped">
 	<thead>
@@ -15,15 +22,25 @@
 	</thead>
 	<tbody>
 		<?php
-		foreach ( $results as $row ) {
-			$edit_url = admin_url( 'admin.php?page=wpdb-crud&action=edit&id=' . $row->id );
-			echo '<tr>';
-			echo '<td>' . esc_html( $row->id ) . '</td>';
-			echo '<td>' . esc_html( $row->name ) . '</td>';
-			echo '<td>' . esc_html( $row->email ) . '</td>';
-			echo '<td width="100"><a href="' . esc_url( $edit_url ) . '" class="button button-small button-primary">Edit</a>
-			<button class="button button-small button-danger">Delete</button></td>';
-			echo '</tr>';
+		if ( count( $results ) > 0 ) {
+			foreach ( $results as $row ) {
+				$edit_url = admin_url( 'admin.php?page=wpdb-crud&action=edit&id=' . $row->id );
+				echo '<tr>';
+				echo '<td>' . esc_html( $row->id ) . '</td>';
+				echo '<td>' . esc_html( $row->name ) . '</td>';
+				echo '<td>' . esc_html( $row->email ) . '</td>';
+				echo '<td width="150">';
+				echo '<a href="' . esc_url( $edit_url ) . '" class="button button-small button-primary">Edit</a>
+				<form method="post" style="display:inline-block;">
+					<input type="hidden" name="id" value="' . esc_attr( $row->id ) . '">
+					<input type="hidden" name="wpdb_crud_nonce" value="' . esc_attr( wp_create_nonce( 'wpdb_crud_action' ) ) . '">
+					<button name="submit" value="Delete" type="submit" class="button button-small button-danger">Delete</button>
+				</form>';
+				echo '</td>';
+				echo '</tr>';
+			}
+		} else {
+			echo '<tr><td colspan="4">No records found.</td></tr>';
 		}
 		?>
 	</tbody>

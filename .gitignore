@@ -4,3 +4,4 @@
 composer-lock.json
 .git
 .vscode/
+node_modules/

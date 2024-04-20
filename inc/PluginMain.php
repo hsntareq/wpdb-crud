@@ -17,6 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * PluginMain Class
  */
 final class PluginMain {
+	use Singleton;
 
 	/**
 	 * Plugin version
@@ -38,21 +39,10 @@ final class PluginMain {
 	 * @return void
 	 */
 	private function __construct() {
+		// Defining plugin constants.
+		$this->define_constants();
 		// All the initialization tasks.
 		$this->register_hooks();
-	}
-
-	/**
-	 * Get the singleton instance of PluginMain.
-	 *
-	 * @return PluginMain
-	 */
-	public static function get_instance(): PluginMain {
-		if ( null === self::$instance ) {
-			self::$instance = new self();
-		}
-
-		return self::$instance;
 	}
 
 	/**
@@ -60,26 +50,22 @@ final class PluginMain {
 	 */
 	private function register_hooks() {
 
-		register_activation_hook( WC_PLUGIN_FILE, array( $this, 'activate' ) );
-		register_deactivation_hook( WC_PLUGIN_FILE, array( $this, 'deactivate' ) );
+		register_activation_hook( WC_PLUGIN_PATH, array( $this, 'activate' ) );
+		register_deactivation_hook( WC_PLUGIN_PATH, array( $this, 'deactivate' ) );
 
 		add_action( 'plugins_loaded', array( $this, 'init_plugin' ) );
 	}
 
 	/**
 	 * Initialize classes to the plugin.
-	 * This method will run after the plugins_loaded action has been fired.
-	 * This is a good place to include files and instantiate classes.
 	 * This method is called by the register_hooks method.
 	 *
 	 * @return void
 	 */
 	public function init_plugin() {
-		// Defining plugin constants.
-		$this->define_constants();
-
-		Database::get_instance(); // Instentiate Database class.
 		Enqueue::get_instance(); // Instentiate Asset Enqueue class.
+		Database::get_instance(); // Instentiate Database class.
+		Admin_Page::get_instance(); // Instentiate Asset Enqueue class.
 	}
 
 	/**
@@ -123,13 +109,11 @@ final class PluginMain {
 
 		update_option( 'wpdb_crud__version', self::PLUGIN_VERSION );
 	}
+
 	/**
 	 * Run code when the plugin is activated
 	 */
 	public function deactivate() {
-
-		Database::get_instance()->deactivate();
-
 		delete_option( 'wpdb_crud__installed' );
 		delete_option( 'wpdb_crud__version' );
 	}

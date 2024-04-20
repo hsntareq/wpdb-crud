@@ -3,9 +3,15 @@
  * Plugin Name: WPDB CRUD
  * Plugin URI: https://example.com/custom-database-plugin
  * Description: A plugin to demonstrate WordPress database operations using OOP approach.
- * Version: 1.0
+ * Version: 1.0.0
  * Author: Your Name
  * Author URI: https://example.com
+ * License: GPL2
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain: wpdb-crud
+ * Domain Path: /languages
+ * Requires at least: 5.2
+ * Requires PHP: 7.0
  *
  * @package wordpress-plugin
  * @since 1.0.0
@@ -25,21 +31,3 @@ if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 }
 
 WpdbCrud\PluginMain::get_instance();
-
-// Debug pring function.
-if ( ! function_exists( 'pr' ) ) {
-	function pr( $data ) {
-		echo '<pre>';
-		print_r( $data );
-		echo '</pre>';
-	}
-}
-
-// Debug dump function.
-if ( ! function_exists( 'vd' ) ) {
-	function vd( $data ) {
-		echo '<pre>';
-		print_r( $data );
-		echo '</pre>';
-	}
-}
