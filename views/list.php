@@ -14,10 +14,10 @@
 <table class="wp-list-table widefat striped">
 	<thead>
 		<tr>
-			<th>ID</th>
-			<th>Name</th>
-			<th>Email</th>
-			<th>Action</th>
+			<th><?php esc_html_e( 'ID', 'wpdb-crud' ); ?></th>
+			<th><?php esc_html_e( 'Name', 'wpdb-crud' ); ?></th>
+			<th><?php esc_html_e( 'Email', 'wpdb-crud' ); ?></th>
+			<th><?php esc_html_e( 'Action', 'wpdb-crud' ); ?></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -34,7 +34,7 @@
 				<form method="post" style="display:inline-block;">
 					<input type="hidden" name="id" value="' . esc_attr( $row->id ) . '">
 					<input type="hidden" name="wpdb_crud_nonce" value="' . esc_attr( wp_create_nonce( 'wpdb_crud_action' ) ) . '">
-					<button name="submit" value="Delete" type="submit" class="button button-small button-danger">Delete</button>
+					<button name="submit" onclick="return confirm(\'Are you sure you want to delete?\')" value="Delete" type="submit" class="button button-small button-danger">Delete</button>
 				</form>';
 				echo '</td>';
 				echo '</tr>';
@@ -46,11 +46,3 @@
 	</tbody>
 </table>
 <p>Total rows: <?php echo esc_html( $total_rows ); ?> </p>
-<style>
-	.button-danger {
-		border-color: #dc3232 !important;
-		border-color: #dc3232 !important;
-		background-color: #dc3232 !important;
-		color: #fff !important;
-	}
-</style>

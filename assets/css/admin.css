@@ -10,3 +10,10 @@
 .wpdb-crud-wrap form table input {
 	width: 100%;
 }
+
+.wpdb-crud-wrap .button-danger {
+	border-color: #dc3232 !important;
+	border-color: #dc3232 !important;
+	background-color: #dc3232 !important;
+	color: #fff !important;
+}

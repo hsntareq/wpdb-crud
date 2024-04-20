@@ -74,7 +74,22 @@ class Database {
 	 * @return void
 	 */
 	public function init() {
+		// Add notice if name or email is empty.
+		add_action( 'wp', array( $this, 'delete_transient_after_expiry' ) );
+		add_action( 'admin_notices', array( $this, 'custom_admin_notice' ) );
+
 		$this->crud_action();
+	}
+
+
+	/**
+	 * Delete transient message after expiry.
+	 *
+	 * @return void
+	 */
+	public function delete_transient_after_expiry() {
+		// Delete the transient message.
+		delete_transient( 'crud_message' );
 	}
 
 	/**
@@ -83,6 +98,7 @@ class Database {
 	 * @return void
 	 */
 	public function crud_action() {
+
 		global $wpdb;
 		// Return if nonce validation fails.
 		if ( ! isset( $_POST['wpdb_crud_nonce'] )
@@ -113,19 +129,28 @@ class Database {
 	}
 
 	/**
-	 * Delete post.
+	 * Insert post.
 	 *
-	 * @param mixed $id Post ID.
+	 * @param mixed $name  Post name.
+	 * @param mixed $email Post email.
 	 *
 	 * @return void
 	 */
-	public function wpdb_crud_delete( $id ) {
+	public function wpdb_crud_insert( $name, $email ) {
 		global $wpdb;
-		if ( ! empty( $id ) ) {
-			$wpdb->delete( $this->table_name, array( 'id' => $id ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+		if ( ! empty( $name ) && ! empty( $email ) ) {
+			$wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+				$this->table_name,
+				array(
+					'name'  => $name,
+					'email' => $email,
+				)
+			);
+			// Call functions after each operation.
+			set_transient( 'crud_message', array( 'success' => 'Insert operation successful' ), 1 );
 		} else {
-			// Add notice if ID is empty.
-			add_action( 'admin_notices', array( $this, 'empty_name_email_notice' ) );
+			// Set transient message after insert.
+			set_transient( 'crud_message', array( 'error' => 'Name or Email can\'t be empty.' ), 1 ); 
 			return;
 		}
 
@@ -153,9 +178,12 @@ class Database {
 				),
 				array( 'id' => $id )
 			);
+
+			// Set transient message after update.
+			set_transient( 'crud_message', array( 'info' => 'Update operation successful' ), 1 ); 
 		} else {
-			// Add notice if name or email is empty.
-			add_action( 'admin_notices', array( $this, 'empty_name_email_notice' ) );
+			// Set transient message after update.
+			set_transient( 'crud_message', array( 'error' => 'Name or Email can\'t be empty.' ), 1 ); 
 			return;
 		}
 
@@ -164,28 +192,20 @@ class Database {
 	}
 
 	/**
-	 * Insert post.
+	 * Delete post.
 	 *
-	 * @param mixed $name  Post name.
-	 * @param mixed $email Post email.
+	 * @param mixed $id Post ID.
 	 *
 	 * @return void
 	 */
-	public function wpdb_crud_insert( $name, $email ) {
+	public function wpdb_crud_delete( $id ) {
 		global $wpdb;
-		if ( ! empty( $name ) && ! empty( $email ) ) {
-			$wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
-				$this->table_name,
-				array(
-					'name'  => $name,
-					'email' => $email,
-				)
-			);
+		if ( ! empty( $id ) ) {
+			$wpdb->delete( $this->table_name, array( 'id' => $id ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+
+			// Set transient message after delete.
+			set_transient( 'crud_message', array( 'success' => 'Delete operation successful' ), 1 ); 
 		} else {
-			// Set transient message.
-			set_transient( 'wpdb_crud_message', 'Name or Email cannot be empty.', 5 );
-			// Add notice if name or email is empty.
-			add_action( 'admin_notices', array( $this, 'empty_name_email_notice' ) );
 			return;
 		}
 
@@ -198,13 +218,23 @@ class Database {
 	 *
 	 * @return void
 	 */
-	public function empty_name_email_notice() {
-		?>
-		<div class="notice notice-error is-dismissible">
-			<p><?php esc_html_e( 'Name or Email cannot be empty.', 'wpdb-crud' ); ?></p>
-		</div>
-		<?php
+	public function custom_admin_notice() {
+		// Check if transient exists.
+		$notice = get_transient( 'crud_message' );
+
+		if ( $notice ) {
+			// Check if the transient message is an array.
+			if ( is_array( $notice ) ) {
+				// Print each key-value pair.
+				foreach ( $notice as $key => $value ) {
+					echo '<div class="notice notice-' . esc_attr( $key ) . ' is-dismissible">';
+					echo '<p><strong>' . esc_attr( ucfirst( $key ) ) . ':</strong> ' . esc_html( $value ) . '</p>';
+					echo '</div>';
+				}
+			}
+		}
 	}
+
 
 	/**
 	 * Get wpdb data count.
