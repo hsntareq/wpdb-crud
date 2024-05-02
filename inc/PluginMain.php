@@ -50,8 +50,8 @@ final class PluginMain {
 	 */
 	private function register_hooks() {
 
-		register_activation_hook( WC_PLUGIN_PATH, array( $this, 'activate' ) );
-		register_deactivation_hook( WC_PLUGIN_PATH, array( $this, 'deactivate' ) );
+		register_activation_hook( WC_PLUGIN_FILE, array( $this, 'activate' ) );
+		register_deactivation_hook( WC_PLUGIN_FILE, array( $this, 'deactivate' ) );
 
 		add_action( 'plugins_loaded', array( $this, 'init_plugin' ) );
 	}

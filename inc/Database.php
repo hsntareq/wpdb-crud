@@ -150,7 +150,7 @@ class Database {
 			set_transient( 'crud_message', array( 'success' => 'Insert operation successful' ), 1 );
 		} else {
 			// Set transient message after insert.
-			set_transient( 'crud_message', array( 'error' => 'Name or Email can\'t be empty.' ), 1 ); 
+			set_transient( 'crud_message', array( 'error' => 'Name or Email can\'t be empty.' ), 1 );
 			return;
 		}
 
@@ -180,10 +180,10 @@ class Database {
 			);
 
 			// Set transient message after update.
-			set_transient( 'crud_message', array( 'info' => 'Update operation successful' ), 1 ); 
+			set_transient( 'crud_message', array( 'info' => 'Update operation successful' ), 1 );
 		} else {
 			// Set transient message after update.
-			set_transient( 'crud_message', array( 'error' => 'Name or Email can\'t be empty.' ), 1 ); 
+			set_transient( 'crud_message', array( 'error' => 'Name or Email can\'t be empty.' ), 1 );
 			return;
 		}
 
@@ -204,7 +204,7 @@ class Database {
 			$wpdb->delete( $this->table_name, array( 'id' => $id ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
 
 			// Set transient message after delete.
-			set_transient( 'crud_message', array( 'success' => 'Delete operation successful' ), 1 ); 
+			set_transient( 'crud_message', array( 'success' => 'Delete operation successful' ), 1 );
 		} else {
 			return;
 		}
